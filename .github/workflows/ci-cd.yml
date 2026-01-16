@@ -10,6 +10,7 @@ on:
 jobs:
   # 1) BUILD (tous les builds dans un seul job logique)
   build:
+    name: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
