@@ -4,7 +4,9 @@
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "echo 'pas de build dédié'",
+    "test": "echo 'pas de tests dédiés'"
   },
   "dependencies": {
     "@types/eureka-js-client": "^4.5.9",
