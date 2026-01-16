@@ -199,7 +199,7 @@ jobs:
         shell: powershell
         run: |
           # Aller dans le dossier du projet
-          Set-Location -Path "E:\ESIC\Cloud_Computing_DevOps_DevSecOps\local\smartevent-ia-main"
+          Set-Location -Path "C:\Users\treso\deploy\SmartEventAI-Local-Cloud"
 
           # Mettre à jour le code
           git checkout dev
