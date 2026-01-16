@@ -225,7 +225,7 @@ services:
       gateway-service:
         condition: service_healthy
 
-    # ---------- SONARQUBE + DB DÉDIÉE ----------
+  # ---------- SONARQUBE + DB DÉDIÉE ----------
 
   sonarqube-db:
     image: postgres:15
