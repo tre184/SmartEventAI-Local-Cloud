@@ -189,7 +189,7 @@ jobs:
   #      docker compose up -d --remove-orphans
   #      docker ps
   deploy_local:
-    runs-on: windows-latest
+    runs-on: self-hosted
     needs: docker-build-push
     steps:
       - name: Checkout code
