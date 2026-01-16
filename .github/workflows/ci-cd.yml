@@ -207,7 +207,7 @@ jobs:
 
           # Pull et relance des containers
           docker compose pull
-          docker compose up -d --remove-orphans
+          docker compose --profile ui up -d --remove-orphans
 
           # Vérifier les containers
           docker ps
