@@ -8,7 +8,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  # 1) BUILD & TEST
+  # 1) BUILD
 
   build-maven:
     runs-on: ubuntu-latest
@@ -82,6 +82,7 @@ jobs:
           pip install -r requirements.txt
           python -m py_compile $(find . -name "*.py")
 
+  # 2) TESTS
   test-front:
     runs-on: ubuntu-latest
     needs: build-front
@@ -138,7 +139,30 @@ jobs:
           pip install -r requirements.txt
           pytest || echo "tests simples"
 
-  # 2) DOCKER BUILD & PUSH
+  # 3) Analyse
+  analyze_semgrep:
+    name: Run Semgrep Scan
+    runs-on: ubuntu-latest
+    needs:
+      - test-front
+      - test-front-admin
+      - test-workflow
+      - test-ai
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Semgrep
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install semgrep
+
+      - name: Run Semgrep
+        run: |
+          semgrep scan --config p/ci --error
+
+  # 4) DOCKER BUILD & PUSH
   docker-build-push:
     runs-on: self-hosted
     #runs-on: ubuntu-latest
@@ -148,6 +172,7 @@ jobs:
       - test-front-admin
       - test-workflow
       - test-ai
+      - analyze_semgrep
 
     permissions:
       contents: read
@@ -169,31 +194,7 @@ jobs:
       - name: Push images
         run: docker compose -f docker-compose.yml push
 
-  # 3) Analyse avec Semgrep
-  semgrep:
-    name: Run Semgrep Scan
-    runs-on: self-hosted
-    #runs-on: ubuntu-latest
-    needs:
-      - test-front
-      - test-front-admin
-      - test-workflow
-      - test-ai
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Semgrep
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install semgrep
-
-      - name: Run Semgrep
-        run: |
-          semgrep scan --config p/ci --error
-
-  # 4) DEPLOY
+  # 5) DEPLOY
   #deploy:
   #runs-on: ubuntu-latest
   # ne part que si les images sont build & push
